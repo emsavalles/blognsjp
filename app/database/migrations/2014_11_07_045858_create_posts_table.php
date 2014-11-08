@@ -20,8 +20,6 @@ class CreatePostsTable extends Migration {
                     $table->LongText('content');
                     $table->string('imagen');            
                     $table->string('pie');
-                    $table->string('video');
-                    $table->string('audio');
                     $table->unsignedInteger('visible');
                     $table->timestamps();
                     $table->engine = 'MyISAM';

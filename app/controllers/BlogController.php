@@ -1,8 +1,8 @@
 <?php
 
     class BlogController extends BaseController {
- 
-
+  //public $layout = 'inicio';
+    public $main="";
     public function __construct()
     {
         //updated: prevents re-login.
@@ -12,14 +12,11 @@
     public function getIndex() 
     {
 
-        $posts = Post::orderBy('id','desc')->paginate(10);
+        $posts = Post::orderBy('id','desc')->paginate(3);
 
-        // For Laravel 4.2 use getFactory() instead of getEnvironment() method.
         $posts->getFactory()->setViewName('pagination::simple');
-        $this->layout->title = 'Home Page | Laravel 4 Blog';
-        $this->layout->main = View::make('home')->nest('content','index',compact('posts'));
-
-
+        $this->layout->title = 'P&aacute;gina inicial';
+        $this->layout->main = View::make('inicio')->nest('content','index',compact('posts'));
     }
  
     public function getSearch()

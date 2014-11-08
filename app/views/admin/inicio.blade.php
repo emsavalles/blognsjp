@@ -13,8 +13,9 @@
       height: 60px;
       background-color: #f5f5f5;
     }
+    .form-group{ overflow: auto; margin:0 0 5px 0 !important;}
    </style>
-    <title>Laravel PHP Framework</title>
+    <title><?php echo (isset($title))? $title : "Bienvenido"; ?></title>
 </head>
 <body>
 
@@ -38,7 +39,9 @@
             
             <!-- Dropdown menu -->
             <ul class="dropdown-menu">
-              <li><a href="logout"><i class="fa fa-sign-out"></i> Cerrar Sesi&oacute;n</a></li>
+            <li>
+                <a href="{{ action('AuthController@logOut') }}">Cerrar Sesi&oacute;n</a>                        
+            </li>
             </ul>
           </li>
           
@@ -48,11 +51,17 @@
       
     </nav>
 
-    <div class="container">
+    <div>
     
-    <div class="sidebar">
-    <a href="admin/post/new">Nuevo Post</a>
-    </div>
+<div class="col-md-2">
+    <a href="{{ action('PostController@newPost') }}">Nuevo Post</a>
+</div>
+
+<div class="col-md-10">
+<?php if (isset($main))
+echo $main;
+?>
+</div>
     
 <!--    
         <div class="">
@@ -79,12 +88,14 @@
   </div>
 </div>
 -->
+<!--
     </div>
     <div class="footer">
       <div class="container">
         <p class="text-muted">Place sticky footer content here.</p>
       </div>
-    </div>        
+    </div>  
+-->          
 </body>
         {{ HTML::script('assets/js/jquery.js'); }}
         {{ HTML::script('assets/js/bootstrap.js'); }}

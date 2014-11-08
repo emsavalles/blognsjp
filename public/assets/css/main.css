@@ -2,7 +2,10 @@
 
 body{ background-color:#dddcd7}
 .seccion1 th{ font-size:18px; text-align:center;}
-.seccion1 td{ padding:3px}
+.seccion1 td{ padding:3px;}
+.seccion1 h2{margin-bottom:0}
+.seccion1 figure{ max-height:264px; overflow:hidden; }
+.seccion1 img{width: 100%;}
 .container{ padding:0;}
 
 .navbar{ border-radius:0;

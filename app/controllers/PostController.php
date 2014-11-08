@@ -1,7 +1,8 @@
 <?php 
     class PostController extends BaseController
 {
- 
+ public $layout = 'admin.inicio';
+ public $mensaje="";
     /* get functions */
     public function listPost()
     {
@@ -18,9 +19,10 @@
  
     public function newPost()
     {
-    //return 1;
-        $this->layout->title = 'New Post';
-        $this->layout->main = View::make('dash')->nest('content', 'posts.new');
+//return 1;
+    //return  View::make('admin.inicio')->with('title','ti');
+    $this->layout->title = 'New Post';
+    $this->layout->main = View::make('posts.new');
     }
  
     public function editPost(Post $post)
@@ -38,25 +40,66 @@
     /* post functions */
     public function savePost()
     {
-        $post = [
-            'title' => Input::get('title'),
-            'content' => Input::get('content'),
-        ];
-        $rules = [
-            'title' => 'required',
-            'content' => 'required',
-        ];
-        $valid = Validator::make($post, $rules);
-        if ($valid->passes())
-        {
-            $post = new Post($post);
-//            $post->comment_count = 0;
-            $post->read_more = (strlen($post->content) > 120) ? substr($post->content, 0, 120) : $post->content;
-            $post->save();
-            return Redirect::to('admin/dash-board')->with('success', 'Post is saved!');
-        }
-        else
-            return Redirect::back()->withErrors($valid)->withInput();
+        $post = new Post;
+        $nomn="";
+//        $input = Input::all();
+
+    $file = (Input::file("imagen")!="")?Input::file("imagen"):"";
+    
+    if ($file!=""){
+        $trozos = explode(".", $file->getClientOriginalName()); 
+        $extension = end($trozos);
+        array_pop($trozos);
+        $nombf=implode($trozos);
+         
+        $nombre_fichero = 'img_notas/'.$file->getClientOriginalName();
+        
+        if (file_exists($nombre_fichero)) {
+            $nomn=$nombf.'_'.date('ymdhis').'.'.$extension;
+        }else{
+            $nomn=$file->getClientOriginalName();
+        }    
+    }
+    
+    $input = array(
+        "title"     =>    Input::get("title"),
+        "bajada"    =>    Input::get("bajada"),
+        "lugar"     =>    Input::get("lugar"),
+        "content"   =>    Input::get("content"),
+        "imagen"    =>    $nomn,
+        "pie"       =>    Input::get("pie"),
+        "visible"   =>    1,
+    );
+    
+    $dataUpload = array(
+        "title"    =>    Input::get("title"),
+        "content"        =>    Input::get("content"),
+        "imagen"        =>    Input::file("imagen")
+    );    
+
+    $validator = Post::validate($dataUpload);
+		if($validator->fails()){
+        Session::reflash();
+        	$errors = $validator->messages()->all();
+            $this->layout->main = View::make('posts.new')
+                    ->withInput($input)
+					->with('errors', $errors);
+		
+        }else{
+            
+            $post->fill($input);
+        if($post->save()){
+            if ($file!=""){
+////////////////////////////////////////////////////////////////////////
+                $file->move("img_notas",$nomn);
+///////////////////////////////////////////////////////////////////////
+            }
+            Session::flash('mensaje', "Nota registrada correctamente");
+            return Redirect::to('admin/post/new');
+
+        } 
+			}
+
     }
  
     public function updatePost(Post $post)

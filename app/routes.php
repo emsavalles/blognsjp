@@ -1,19 +1,4 @@
 <?php
-/*
-Route::model('post','Post');
-
-Route::get('post/{post}',function(Post $post)
-{
-    echo $post->title;
- 
-});
-
-Route::get('/', function()
-{
-	return View::make('hello');
-});
-*/
-
 
 /* Model Bindings */
 Route::model('post','Post');
@@ -63,6 +48,11 @@ Route::group(array('before' => 'auth'), function()
     Route::get('logout', 'AuthController@logOut');
 });
 //--------FIN LOGIN----------------/
+
+//
+//Route::get('/', function(){return View::make('inicio');});
+Route::get('/contacto','ContactoController@getContacto');
+Route::post('/contacto','ContactoController@postContacto');
 
 
 /* Home routes */
